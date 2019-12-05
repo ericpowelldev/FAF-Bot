@@ -1,2 +1,5 @@
 # FAF_BOT
-The official Discord bot for the FAF Squad.
+
+The official Discord bot of the FAF Squad.
+
+### Overview

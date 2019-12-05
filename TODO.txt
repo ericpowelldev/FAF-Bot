@@ -1,0 +1,5 @@
+- if _embed is added to specific commands, it will RichEmbed the reply
+- add dice roll command --> .r 4d20+69 (w/ specific response: :smoking: Nice)
+- add a gold gambling system along with a shop and inventory for things you buy (armor and weapons)
+- add d&d-like combat system (with sideline betting)
+- add leveling system

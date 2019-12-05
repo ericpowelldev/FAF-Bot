@@ -1,0 +1,31 @@
+{
+  "name": "faf_bot",
+  "version": "0.1.0",
+  "description": "The official Discord bot of the FAF Squad.",
+  "author": "Eric Powell",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "ascii-table": "0.0.9",
+    "axios": "^0.19.0",
+    "common-tags": "^1.8.0",
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericpowell3d/FAF_BOT.git"
+  },
+  "homepage": "https://github.com/ericpowell3d/FAF_BOT#readme",
+  "bugs": {
+    "url": "https://github.com/ericpowell3d/FAF_BOT/issues"
+  }
+}
