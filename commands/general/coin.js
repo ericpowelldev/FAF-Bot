@@ -9,8 +9,8 @@ module.exports = {
         if (message.deletable) message.delete();
         
         if (rdmInt(0, 1) === 0)
-            return message.reply(`Heads!`);
+            return message.reply(`flipped a coin and got HEADS!`);
         else
-            return message.reply(`Tails!`);
+            return message.reply(`flipped a coin and got TAILS!`);
     }
 }
