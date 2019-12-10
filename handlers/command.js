@@ -13,7 +13,7 @@ module.exports = (client) => {
 
             if (pull.name) {
                 client.commands.set(pull.name, pull);
-                table.addRow(file, `On`)
+                table.addRow(`.${file.slice(0, file.length - 3)}`, `On`)
             }
             else {
                 table.addRow(file, `Off --> Missing...`);

@@ -3,6 +3,12 @@ module.exports = {
     // Non-breaking space
     nbsp: `\xa0`,
 
+    // Code-block 2
+    cb2: "``",
+
+    // Code-block 3
+    cb3: "```",
+
     // Theme palette object
     theme: {
         color: {

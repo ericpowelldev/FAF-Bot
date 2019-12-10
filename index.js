@@ -1,6 +1,7 @@
 // Dependencies
 const { Client, Collection } = require(`discord.js`);
 const { config } = require(`dotenv`);
+const moment = require('moment');
 const pj = require('./package.json');
 
 // Create the client & prevent @everyone
@@ -21,7 +22,8 @@ config({
 
 // On Start
 client.on(`ready`, () => {
-    console.log(`${client.user.username} v${pj.version} is online...`);
+    console.log(`-- (c) ${moment().format("YYYY")} by Eric Powell --`);
+    console.log(`-- ${client.user.username} v${pj.version} is online --`);
 
     client.user.setPresence({
         game: {
@@ -40,6 +42,7 @@ client.on(`message`, async message => {
 
     if (message.author.bot) return;
     if (!message.guild) return;
+    if (message.content === 'Hello' || message.content === 'hello') return message.channel.sendMessage(message.author + `, ${client.user.username} says hello!`);
     if (!message.content.startsWith(prefix)) return;
     if (!message.member) message.member = await message.guild.fetchMember(message);
 
