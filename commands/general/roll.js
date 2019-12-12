@@ -1,14 +1,18 @@
-const { cb2, rdmInt } = require(`../../tools.js`);
+//////////////////////////////  DEPENDENCIES  //////////////////////////////
+const { RichEmbed } = require(`discord.js`);
+const { stripIndents } = require(`common-tags`);
+const { cb2, nbsp, rdmInt, getMember, formatDate } = require(`../../tools.js`);
 
+//////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {
-    name: `dice`,
-    aliases: [`d`, `roll`, `r`],
+    name: `roll`,
+    aliases: [`r`, `dice`, `d`],
     category: `general`,
-    description: `Rolls a die based on an amount, number of sides, and modifier.`,
+    description: `Rolls a die based on a number of dice, number of sides, and modifier.`,
+    params: `[ ${cb2}# of dice${cb2} ]    [ ${cb2}# of sides${cb2} ]    [ ${cb2}modifiers${cb2} ]`,
     run: async (client, message, args) => {
         const log = false;
-        if (message.deletable) message.delete();
-
+        
         if (args[0] && args[0] === `help`) return message.reply(`try ${cb2}.r <#>d<#>+<#>${cb2}`);
         else if (args[0] && args[0].includes(`d`)) {
 
@@ -65,7 +69,7 @@ module.exports = {
             if (log) console.log(`RESULT MOD: `, resMod);
             if (log) console.log(`TOTAL: `, total);
 
-            return message.reply(`rolled ${cb2}${amount}d${sides}${resMod !== 0 ? (resMod > 0 ? "+" + resMod : resMod) : ``}${cb2} and got ${cb2}${total}${cb2}${args[0] === `4d20+69` && ` ( ͡° ͜ʖ ͡°)`}`);
+            return message.reply(`rolled ${cb2}${amount}d${sides}${resMod !== 0 ? (resMod > 0 ? "+" + resMod : resMod) : ``}${cb2} and got ${cb2}${total}${cb2}${args[0] === `4d20+69` ? ` ( ͡° ͜ʖ ͡°)` : ``}`);
         }
         else {
             const result = rdmInt(1, 20);

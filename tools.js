@@ -1,4 +1,20 @@
+//////////////////////////////  DEPENDENCIES  //////////////////////////////
+
+
+//////////////////////////////  EXPORT TOOLS  //////////////////////////////
 module.exports = {
+
+    // Stored prefix to initiate a command
+    pre: `.`,
+
+    // Theme palette object
+    theme: {
+        color: {
+            bad: `#ff6000`,
+            discord: `#7289da`,
+            good: `#00ff60`,
+        },
+    },
 
     // Non-breaking space
     nbsp: `\xa0`,
@@ -8,13 +24,6 @@ module.exports = {
 
     // Code-block 3
     cb3: "```",
-
-    // Theme palette object
-    theme: {
-        color: {
-            discord: `#7289da`,
-        },
-    },
 
     // Function to get a random integer between 2 numbers
     rdmInt: (min, max) => {
@@ -47,6 +56,7 @@ module.exports = {
 
         return target;
     },
+    // Function to format the date into a readable form
     formatDate: function(date) {
         return new Intl.DateTimeFormat(`en-US`).format(date);
     },

@@ -1,16 +1,19 @@
-// Dependencies
+//////////////////////////////  DEPENDENCIES  //////////////////////////////
 const { Client, Collection } = require(`discord.js`);
+const fs = require(`fs`);
 const { config } = require(`dotenv`);
 const moment = require('moment');
 const pj = require('./package.json');
+const { pre, cb2 } = require(`./tools.js`);
 
 // Create the client & prevent @everyone
+const prefix = pre
 const client = new Client({
     disableEveryone: true
 });
-
 client.commands = new Collection();
 client.aliases = new Collection();
+client.categories = fs.readdirSync(`./commands/`);
 
 config({
     path: __dirname + `/.env`
@@ -24,6 +27,7 @@ config({
 client.on(`ready`, () => {
     console.log(`-- (c) ${moment().format("YYYY")} by Eric Powell --`);
     console.log(`-- ${client.user.username} v${pj.version} is online --`);
+    console.log();
 
     client.user.setPresence({
         game: {
@@ -38,7 +42,6 @@ client.on(`ready`, () => {
 
 // On Message
 client.on(`message`, async message => {
-    const prefix = `.`
 
     if (message.author.bot) return;
     if (!message.guild) return;
@@ -54,10 +57,13 @@ client.on(`message`, async message => {
     let command = client.commands.get(cmd);
     if (!command) command = client.commands.get(client.aliases.get(cmd));
     if (command) command.run(client, message, args);
-
+    
     // MESSAGE LOG //
-    console.log();
-    console.log(`[${message.channel.name}] ${message.author.username}: ${message.content}`);
+    console.log(`    [#${message.channel.name}] ${message.author.username}: ${message.content}`);
+    
+    // DELETE MESSAGE //
+    if (message.deletable) message.delete();
+    if (!command) return message.reply(`command not recognized! Try ${cb2}.help${cb2} for a list of valid commands...`);
 });
 
 client.login(process.env.TOKEN)

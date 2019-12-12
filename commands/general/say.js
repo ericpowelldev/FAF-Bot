@@ -1,16 +1,20 @@
+//////////////////////////////  DEPENDENCIES  //////////////////////////////
 const { RichEmbed } = require(`discord.js`);
-const { theme } = require('../../tools.js');
+const { theme, cb2 } = require(`../../tools.js`);
 
+//////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {
     name: `say`,
     aliases: [`repeat`],
     category: `general`,
     description: `Returns the message sent by the user.`,
+    params: `< ${cb2}anything${cb2} >`,
     run: async (client, message, args) => {
-        if (message.deletable) message.delete();
-        if (args.length < 1) return message.reply(`There's nothing to say!`).then(m => m.delete(5000));
+        const log = false;
 
-        if (args[0].toLowerCase() === `embed`) {
+        if (args[0] && args[0] === `help`) return message.reply(`try ${cb2}.say <anything>${cb2}`);
+        else if (args.length < 1) return message.reply(`There's nothing to say!`).then(m => m.delete(5000));
+        else if (args[0] && args[0].toLowerCase() === `embed`) {
             const embed = new RichEmbed()
                 .setColor(theme.color.discord)
                 .setDescription(args.slice(1).join(` `));
