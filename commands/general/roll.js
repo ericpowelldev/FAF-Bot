@@ -12,9 +12,8 @@ module.exports = {
     params: `[ ${cb2}# of dice${cb2} ]    [ ${cb2}# of sides${cb2} ]    [ ${cb2}modifiers${cb2} ]`,
     run: async (client, message, args) => {
         const log = false;
-        
-        if (args[0] && args[0] === `help`) return message.reply(`try ${cb2}.r <#>d<#>+<#>${cb2}`);
-        else if (args[0] && args[0].includes(`d`)) {
+
+        if (args[0] && args[0].includes(`d`)) {
 
             let amount = parseInt(args[0].split(`d`)[0]);
             amount = !isNaN(amount) && amount !== 0 ? Math.abs(amount) : 1;

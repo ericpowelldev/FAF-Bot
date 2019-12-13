@@ -13,41 +13,37 @@ module.exports = {
     run: async (client, message, args) => {
         const log = false;
 
-        if (args[0] && args[0] === `help`) return message.reply(`try ${cb2}.info <user>${cb2}`);
-        else {
+        // MEMBER VARS //
+        const member = getMember(message, args.join(` `));
+        const joined = formatDate(member.joinedAt);
+        const roles = member.roles
+            .filter(r => r.id !== message.guild.id)
+            .map(r => r)
+            .join(`, `) || `None`;
 
-            // MEMBER VARS //
-            const member = getMember(message, args.join(` `));
-            const joined = formatDate(member.joinedAt);
-            const roles = member.roles
-                .filter(r => r.id !== message.guild.id)
-                .map(r => r)
-                .join(`, `) || `None`;
+        // USER VARS //
+        const created = formatDate(member.user.createdAt);
 
-            // USER VARS //
-            const created = formatDate(member.user.createdAt);
+        // EMBED //
+        const embed = new RichEmbed()
+            .setFooter(member.displayName, member.user.displayAvatarURL)
+            .setThumbnail(member.user.displayAvatarURL)
+            .setColor(member.displayHexColor)
 
-            // EMBED //
-            const embed = new RichEmbed()
-                .setFooter(member.displayName, member.user.displayAvatarURL)
-                .setThumbnail(member.user.displayAvatarURL)
-                .setColor(member.displayHexColor)
-
-                .addField(`User Info`, stripIndents`**Username:**${nbsp + nbsp + nbsp}${member.user.username}
+            .addField(`User Info`, stripIndents`**Username:**${nbsp + nbsp + nbsp}${member.user.username}
                     **Tag:**${nbsp + nbsp + nbsp}#${member.user.tag.split(`#`)[1]}
                     **ID:**${nbsp + nbsp + nbsp}${member.user.id}
                     **Created:**${nbsp + nbsp + nbsp}${created}`, true)
 
-                .addField(`Member Info`, stripIndents`**Nickname:**${nbsp + nbsp + nbsp}${member.displayName}
+            .addField(`Member Info`, stripIndents`**Nickname:**${nbsp + nbsp + nbsp}${member.displayName}
                     **Roles:**${nbsp + nbsp + nbsp}${roles}
                     **Joined:**${nbsp + nbsp + nbsp}${joined}`, true)
 
-                .setTimestamp()
+            .setTimestamp()
 
-            if (member.user.presence.game)
-                embed.addField(`Playing`, `**${member.presence.game.name}**`);
+        if (member.user.presence.game)
+            embed.addField(`Playing`, `**${member.presence.game.name}**`);
 
-            message.channel.send(embed);
-        }
+        message.channel.send(embed);
     }
 }

@@ -15,8 +15,6 @@ module.exports = {
 
         if (args[0]) return getOne(client, message, args[0]);
         else return getAll(client, message);
-        // if (args[0] && args[0] === `help`) return message.reply(`if you need help with the help command, you should probably just kill yourself...`);
-        // else return message.reply(`you're on your own for now...`);
     }
 }
 

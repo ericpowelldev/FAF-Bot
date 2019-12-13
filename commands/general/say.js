@@ -12,8 +12,7 @@ module.exports = {
     run: async (client, message, args) => {
         const log = false;
 
-        if (args[0] && args[0] === `help`) return message.reply(`try ${cb2}.say <anything>${cb2}`);
-        else if (args.length < 1) return message.reply(`There's nothing to say!`).then(m => m.delete(5000));
+        if (args.length < 1) return message.reply(`There's nothing to say!`).then(m => m.delete(5000));
         else if (args[0] && args[0].toLowerCase() === `embed`) {
             const embed = new RichEmbed()
                 .setColor(theme.color.discord)
