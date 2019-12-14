@@ -1,7 +1,7 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
 const { RichEmbed } = require(`discord.js`);
 const { stripIndents } = require(`common-tags`);
-const { cb2, nbsp, getMember, formatDate } = require(`../../tools.js`);
+const { cb2, nbsp, getMember, formatDate } = require(`../../utils/tools.js`);
 
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {
@@ -13,18 +13,14 @@ module.exports = {
     run: async (client, message, args) => {
         const log = false;
 
-        // MEMBER VARS //
         const member = getMember(message, args.join(` `));
         const joined = formatDate(member.joinedAt);
         const roles = member.roles
             .filter(r => r.id !== message.guild.id)
             .map(r => r)
             .join(`, `) || `None`;
-
-        // USER VARS //
         const created = formatDate(member.user.createdAt);
 
-        // EMBED //
         const embed = new RichEmbed()
             .setFooter(member.displayName, member.user.displayAvatarURL)
             .setThumbnail(member.user.displayAvatarURL)

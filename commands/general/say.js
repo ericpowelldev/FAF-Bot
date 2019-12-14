@@ -1,6 +1,6 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
 const { RichEmbed } = require(`discord.js`);
-const { theme, cb2 } = require(`../../tools.js`);
+const { theme, cb2 } = require(`../../utils/tools.js`);
 
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {

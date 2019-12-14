@@ -1,5 +1,5 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
-const { cb2, rdmInt } = require(`../../tools.js`);
+const { cb2, rdmInt } = require(`../../utils/tools.js`);
 
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {

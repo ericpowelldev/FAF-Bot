@@ -1,7 +1,7 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
 const { RichEmbed } = require(`discord.js`);
 const { stripIndents } = require(`common-tags`);
-const { cb2, nbsp, rdmInt, getMember, formatDate } = require(`../../tools.js`);
+const { cb2, nbsp, rdmInt, getMember, formatDate } = require(`../../utils/tools.js`);
 
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {
