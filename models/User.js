@@ -14,7 +14,7 @@ const User = mongoose.Schema({
     },
     lvl: {
         type: Number,
-        default: 0,
+        default: 1,
         required: true,
     },
     xp: {
@@ -24,7 +24,7 @@ const User = mongoose.Schema({
     },
     gold: {
         type: Number,
-        default: 0,
+        default: 100,
         required: true,
     },
     info: {
@@ -51,13 +51,26 @@ const User = mongoose.Schema({
         default: [
             {
                 category: `offense`,
-                type: `dagger`,
+                type: `sword`,
                 ref: `0000`,
-                name: `Iron Dagger`,
+                name: `Iron Sword`,
                 material: `iron`,
-                damLow: 1,
-                damHigh: 3,
+                cost: 25,
+                hit: 5,
+                damLow: 5,
+                damHigh: 10,
                 critMult: 2,
+            },
+            {
+                category: `defense`,
+                type: `medium`,
+                ref: `1000`,
+                name: `Iron Armor`,
+                material: `iron`,
+                cost: 25,
+                mob: 5,
+                armLow: 5,
+                armHigh: 10,
             },
         ],
         required: true,

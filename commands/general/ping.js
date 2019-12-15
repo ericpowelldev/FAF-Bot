@@ -1,5 +1,5 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
-const pj = require('../../package.json');
+const pj = require(`../../package.json`);
 const { cb2, nbsp } = require(`../../utils/tools.js`);
 
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////

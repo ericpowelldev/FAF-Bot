@@ -10,6 +10,7 @@ module.exports = {
     category: `general`,
     description: `Rolls a die based on a number of dice, number of sides, and modifier.`,
     params: `[ ${cb2}# of dice${cb2} ]    [ ${cb2}# of sides${cb2} ]    [ ${cb2}modifiers${cb2} ]`,
+    example: `${cb2}.r 4d20+69${cb2}`,
     run: async (client, message, args) => {
         const log = false;
 
