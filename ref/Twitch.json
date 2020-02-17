@@ -1,0 +1,33 @@
+{
+    "content": "{{ChannelName}} is live on Twitch!",
+    "embeds": [
+        {
+            "color": 6570404,
+            "url": "{{ChannelUrl}}",
+            "author": {
+                "name": "{{ChannelName}} is live with {{CurrentViewers}} viewers!"
+            },
+            "footer": {
+                "text": "{{CreatedAt}}"
+            },
+            "image": {
+                "url": "{{StreamPreview}}"
+            },
+            "thumbnail": {
+                "url": "https://static-cdn.jtvnw.net/jtv_user_pictures/69303e7e-a204-4a7e-be0c-42f9589a8e82-profile_image-70x70.png"
+            },
+            "fields": [
+                {
+                    "name": "Playing:",
+                    "value": "{{Game}}",
+                    "inline": true
+                },
+                {
+                    "name": "Channel URL:",
+                    "value": "{{ChannelUrl}}",
+                    "inline": true
+                }
+            ]
+        }
+    ]
+}

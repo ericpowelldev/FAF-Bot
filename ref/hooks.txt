@@ -1,0 +1,61 @@
+Welcome to the Hooks Channel! This channel is for linking our Discord server to other apps thru their API (Application Programming Interface). In order to do this, we need to set specific triggers for when & what we want to send to this channel. These triggers are called **WebHooks**.
+
+We can use WebHooks thru a third-party system called **IFTTT**. If you wish to create a hook for this channel, ask one of the @Founders for permission and tell us what you would like to set up. In order to get started, visit https://ifttt.com. There's no need to create a new account, you can just sign in with your Google account. Once you are signed in, you can begin creating new **Applets** which you can simply think of as "If **this**, Then **that**" statements.
+
+**IF** Twitch streamer goes live, **THEN** send message to Discord:
+
+1. Go to https://ifttt.com and click the **Explore** button. Then click the **+** next to **Make your own applet from scratch**.
+
+2. Click **This**, search for **Twitch**, then click it. (You will need to link your twitch account to IFTTT in order for this to work)
+- Click **Stream going live for a channel you follow**. 
+- Select a channel you follow from the dropdown and click **Create trigger**.
+
+3. Click **That**, search for **Webhooks**, and click it.
+- Click **Make a web request**.
+- You should be presented with a list of fields which you must fill out...
+- This is our URL: ``https://discordapp.com/api/webhooks/652897167282929685/zQ2nEzY0BIsutND69s2-dwycBB9HJC0EtjyKkFOONIWJCAVHDEIJRWNvd_tQwcZ424if``
+- We will be using the **POST** method.
+- The content type is **application/json**.
+- The body is the response that is sent to our Discord server in order to display it in our #text_hooks channel:
+
+```{
+    "content": "{{ChannelName}} is live on Twitch!",
+    "embeds": [
+        {
+            "color": 6570404,
+            "url": "{{ChannelUrl}}",
+            "author": {
+                "name": "{{ChannelName}} is live with {{CurrentViewers}} viewers!"
+            },
+            "footer": {
+                "text": "{{CreatedAt}}"
+            },
+            "image": {
+                "url": "{{StreamPreview}}"
+            },
+            "thumbnail": {
+                "url": "STREAMER-CHANNEL-ICON-GOES-HERE"
+            },
+            "fields": [
+                {
+                    "name": "Playing:",
+                    "value": "{{Game}}",
+                    "inline": true
+                },
+                {
+                    "name": "Channel URL:",
+                    "value": "{{ChannelUrl}}",
+                    "inline": true
+                }
+            ]
+        }
+    ]
+}```
+
+- Copy the code block above and paste it into the body.
+- You will need to replace **STREAMER-CHANNEL-ICON-GOES-HERE** with your streamer's channel icon. To get it, go to Twitch and right click directly on wherever you see your streamer's icon. Click **Copy image address** and you will have the URL. Leave the quotes around the URL when you paste it.
+- Click **Create action** to proceed.
+
+4. Click **Finish** and you are done.
+
+5. If you did everything correctly, the next time your channel goes live on twitch, a message will appear in #text_hooks. It may take anywhere from a few minutes to an hour depending on Twitch's pings that are sent out.

@@ -1,5 +1,5 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
-const { cb2, rdmInt } = require(`../../utils/tools.js`);
+const { cb, rdmInt } = require(`../../utils/global.js`);
 
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {
@@ -7,10 +7,8 @@ module.exports = {
     aliases: [`flip`, `toss`],
     category: `general`,
     description: `Returns heads or tails based on a 50-50.`,
-    params: `-- ${cb2}none${cb2} --`,
+    params: `-- ${cb}none${cb} --`,
     run: async (client, message, args) => {
-        const log = false;
-
-        return message.reply(`flipped a ${cb2}coin${cb2} and got ${cb2}${rdmInt(0, 1) === 0 ? `HEADS` : `TAILS`}${cb2}`);
+        return message.reply(`flipped a ${cb}coin${cb} and got ${cb}${rdmInt(0, 1) === 0 ? `HEADS` : `TAILS`}${cb}`);
     }
 }

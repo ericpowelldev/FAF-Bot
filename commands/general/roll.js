@@ -1,7 +1,7 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
 const { RichEmbed } = require(`discord.js`);
 const { stripIndents } = require(`common-tags`);
-const { cb2, nbsp, rdmInt, getMember, formatDate } = require(`../../utils/tools.js`);
+const { cb, log, rdmInt } = require(`../../utils/global.js`);
 
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {
@@ -9,11 +9,9 @@ module.exports = {
     aliases: [`r`, `dice`, `d`],
     category: `general`,
     description: `Rolls a die based on a number of dice, number of sides, and modifier.`,
-    params: `[ ${cb2}# of dice${cb2} ]    [ ${cb2}# of sides${cb2} ]    [ ${cb2}modifiers${cb2} ]`,
-    example: `${cb2}.r 4d20+69${cb2}`,
+    params: `[ ${cb}# of dice${cb} ]    [ ${cb}# of sides${cb} ]    [ ${cb}modifiers${cb} ]`,
+    example: `${cb}.r 4d20+69${cb}`,
     run: async (client, message, args) => {
-        const log = false;
-
         if (args[0] && args[0].includes(`d`)) {
 
             let amount = parseInt(args[0].split(`d`)[0]);
@@ -26,8 +24,8 @@ module.exports = {
             if (mods.includes(`+`)) mods = mods.slice(mods.indexOf(`+`))
             else if (mods.includes(`-`)) mods = mods.slice(mods.indexOf(`-`));
             else mods = [`0`];
-            if (log) console.log();
-            if (log) console.log(`RAW MODS: `, mods);
+            log();
+            log(`RAW MODS: `, mods);
             for (let i = 0; i < mods.length; i++) {
                 const cur = mods[i];
                 const prev = mods[i - 1];
@@ -46,10 +44,10 @@ module.exports = {
                 mods = [`0`];
             }
 
-            if (log) console.log();
-            if (log) console.log(`AMOUNT: `, amount);
-            if (log) console.log(`SIDES: `, sides);
-            if (log) console.log(`MODS: `, mods);
+            log();
+            log(`AMOUNT: `, amount);
+            log(`SIDES: `, sides);
+            log(`MODS: `, mods);
 
             let results = [];
 
@@ -57,23 +55,23 @@ module.exports = {
                 results.push(rdmInt(1, sides));
             }
 
-            if (log) console.log();
-            if (log) console.log(`RESULTS: `, results);
+            log();
+            log(`RESULTS: `, results);
 
             const resNum = results.reduce((total, current) => total + current);
             const resMod = eval(mods.reduce((total, current) => total + current));
             const total = resNum + resMod;
 
-            if (log) console.log();
-            if (log) console.log(`RESULT NUMBER: `, resNum);
-            if (log) console.log(`RESULT MOD: `, resMod);
-            if (log) console.log(`TOTAL: `, total);
+            log();
+            log(`RESULT NUMBER: `, resNum);
+            log(`RESULT MOD: `, resMod);
+            log(`TOTAL: `, total);
 
-            return message.reply(`rolled ${cb2}${amount}d${sides}${resMod !== 0 ? (resMod > 0 ? "+" + resMod : resMod) : ``}${cb2} and got ${cb2}${total}${cb2}${args[0] === `4d20+69` ? ` ( ͡° ͜ʖ ͡°)` : ``}`);
+            return message.reply(`rolled ${cb}${amount}d${sides}${resMod !== 0 ? (resMod > 0 ? "+" + resMod : resMod) : ``}${cb} and got ${cb}${total}${cb}${args[0] === `4d20+69` ? ` ( ͡° ͜ʖ ͡°)` : ``}`);
         }
         else {
             const result = rdmInt(1, 20);
-            return message.reply(`rolled ${cb2}1d20${cb2} and got ${cb2}${result}${cb2}${result === 20 ? ` --> Crit Success` : (result === 1 ? ` --> Crit Fail` : ``)}`);
+            return message.reply(`rolled ${cb}1d20${cb} and got ${cb}${result}${cb}${result === 20 ? ` --> Crit Success` : (result === 1 ? ` --> Crit Fail` : ``)}`);
         }
     }
 }

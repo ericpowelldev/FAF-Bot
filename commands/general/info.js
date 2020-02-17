@@ -1,18 +1,16 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
 const { RichEmbed } = require(`discord.js`);
 const { stripIndents } = require(`common-tags`);
-const { cb2, nbsp, getMember, formatDate } = require(`../../utils/tools.js`);
+const { cb, getMember, formatDate } = require(`../../utils/global.js`);
 
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {
     name: `info`,
-    aliases: [`user`, `userinfo`, `member`, `memberinfo`],
+    aliases: [`i`, `user`, `userinfo`, `member`, `memberinfo`],
     category: `general`,
     description: `Returns info on the specified user.`,
-    params: `[ ${cb2}username / id / mention${cb2} ]`,
+    params: `[ ${cb}username / id / mention${cb} ]`,
     run: async (client, message, args) => {
-        const log = false;
-
         const member = getMember(message, args.join(` `));
         const joined = formatDate(member.joinedAt);
         const roles = member.roles
@@ -26,14 +24,14 @@ module.exports = {
             .setThumbnail(member.user.displayAvatarURL)
             .setColor(member.displayHexColor)
 
-            .addField(`User Info`, stripIndents`**Username:**${nbsp + nbsp + nbsp}${member.user.username}
-                    **Tag:**${nbsp + nbsp + nbsp}#${member.user.tag.split(`#`)[1]}
-                    **ID:**${nbsp + nbsp + nbsp}${member.user.id}
-                    **Created:**${nbsp + nbsp + nbsp}${created}`, true)
+            .addField(`User Info`, stripIndents`**Username:**\xa0\xa0\xa0${member.user.username}
+                    **Tag:**\xa0\xa0\xa0#${member.user.tag.split(`#`)[1]}
+                    **ID:**\xa0\xa0\xa0${member.user.id}
+                    **Created:**\xa0\xa0\xa0${created}`, true)
 
-            .addField(`Member Info`, stripIndents`**Nickname:**${nbsp + nbsp + nbsp}${member.displayName}
-                    **Roles:**${nbsp + nbsp + nbsp}${roles}
-                    **Joined:**${nbsp + nbsp + nbsp}${joined}`, true)
+            .addField(`Member Info`, stripIndents`**Nickname:**\xa0\xa0\xa0${member.displayName}
+                    **Roles:**\xa0\xa0\xa0${roles}
+                    **Joined:**\xa0\xa0\xa0${joined}`, true)
 
             .setTimestamp()
 
