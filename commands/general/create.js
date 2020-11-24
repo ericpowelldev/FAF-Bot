@@ -1,5 +1,6 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
-const { cb, getMember, CREATE_USER } = require(`../../utils/global.js`);
+const { cb, getMember } = require(`../../utils/global.js`);
+const { CREATE_USER } = require(`../../utils/api.js`);
 
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {
