@@ -50,7 +50,6 @@ module.exports = {
 
     let target = message.guild.members.get(toFind);
     console.log(`target:`, target);
-    console.log(`guild:`, message.guild);
 
     if (!target && message.mentions.members)
       target = message.mentions.members.first();
