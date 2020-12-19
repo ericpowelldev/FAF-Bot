@@ -45,24 +45,24 @@ module.exports = {
 
   // Function to get a specified member based on a search result
   getMember: function (message, toFind = ``) {
+    const log = true;
+
     toFind = toFind.toLowerCase();
-    console.log(`toFind:`, toFind);
-
+    
     let target = message.guild.members.get(toFind);
-    console.log(`target:`, target);
-
-    if (!target && message.mentions.members)
-      target = message.mentions.members.first();
-
+    
+    if (!target && message.mentions.members) target = message.mentions.members.first();
+    
     if (!target && toFind) {
       target = message.guild.members.find(member => {
         return member.displayName.toLowerCase().includes(toFind) ||
-          member.user.tag.toLowerCase().includes(toFind);
+        member.user.tag.toLowerCase().includes(toFind);
       });
     }
-
-    if (!target)
-      target = message.member;
+    
+    if (!target) target = message.member;
+    
+    log && console.log(`\nFind: "${toFind}" --> Found: ${target ? target.user.username : null}\n`);
 
     return target;
   },

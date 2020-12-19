@@ -13,8 +13,11 @@ module.exports = {
         if (args.length < 1) return message.reply(`Please specify a user to create!`).then(m => m.delete(5000));
         else {
             const member = getMember(message, args.join(` `));
-            if (member) await CREATE_USER(member);
-            if (member) return message.reply(`User Created: ${member.user.username}`);
+            if (member) {
+                let createdUser = await CREATE_USER(member.user);
+                if (createdUser) return message.reply(`User Created: ${member.user.username}`);
+                else return message.reply(`User Already Exists: ${member.user.username}`);
+            }
         }
     }
 }

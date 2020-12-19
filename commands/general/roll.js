@@ -9,7 +9,7 @@ module.exports = {
     aliases: [`r`, `dice`, `d`],
     category: `general`,
     description: `Rolls a die based on a number of dice, number of sides, and modifier.`,
-    params: `[ ${cb}# of dice${cb} ]    [ ${cb}# of sides${cb} ]    [ ${cb}modifiers${cb} ]`,
+    params: `[ ${cb}# of dice${cb} ] d [ ${cb}# of sides${cb} ] + [ ${cb}modifiers${cb} ]`,
     example: `${cb}.r 4d20+69${cb}`,
     run: async (client, message, args) => {
         if (args[0] && args[0].includes(`d`)) {

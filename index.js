@@ -5,7 +5,7 @@ const fs = require(`fs`);
 const moment = require(`moment`);
 const mongoose = require(`mongoose`);
 const pj = require(`./package.json`);
-const { prefix, cb, msgXP, log } = require(`./utils/global.js`);
+const { prefix, cb, msgXP } = require(`./utils/global.js`);
 const { CREATE_USER, UPDATE_USER, UPDATE_USER_XP } = require(`./utils/api.js`);
 
 //////////////////////////////  SETUP  //////////////////////////////
@@ -61,6 +61,7 @@ client.on(`message`, async message => {
   // MESSAGE VARIABLES //
   let msgChannel = message.channel.name;
   let msgAuthor = message.author.username;
+  let msgTime = moment(message.createdTimestamp).format(`LTS`);
   let msg = message.content;
 
   // PUSH TO RECENT MESSAGES ARRAY //
@@ -69,13 +70,13 @@ client.on(`message`, async message => {
     recentAuthors.shift();
     recentAuthors.push(msgAuthor);
   }
-  UPDATE_USER_XP(message.author.id, msgXP - recentAuthors.filter(item => item === message.author.username).length + 1)
+  UPDATE_USER_XP(message.author, msgXP - recentAuthors.filter(item => item === message.author.username).length + 1)
 
   // CUSTOM MESSAGES //
-  if (msg === `Hello` || msg === `hello`) return message.channel.sendMessage(message.author + `, ${client.user.username} says hello!`);
+  if (msg === `Hello` || msg === `hello`) return message.channel.send(message.author + `, ${client.user.username} says hello!`);
 
   // MESSAGE LOG //
-  console.log(`    [#${msgChannel}] ${msgAuthor}: ${msg}`);
+  console.log(`[#${msgChannel}] ${msgAuthor} (${msgTime}): ${msg}`);
 
   // FIND COMMAND & ARGS //
   if (!msg.startsWith(prefix)) return;
@@ -96,8 +97,8 @@ client.on(`message`, async message => {
 
 // On User Join
 client.on(`guildMemberAdd`, async (member) => {
-  await CREATE_USER(member);
-  message.channel.sendMessage(`New member: `, member);
+  await CREATE_USER(member.user);
+  message.channel.send(`New member: `, member);
 });
 
 // On User Update
@@ -107,12 +108,12 @@ client.on(`guildMemberAdd`, async (member) => {
 
 // On Reconnection Attempt
 client.on(`reconnecting`, () => {
-  console.log(`-- Attempting to reconnect to the WebSocket... --`);
+  console.log(`\n-- Attempting to reconnect to the WebSocket --\n`);
 });
 
 // On Error
-client.on(`error`, (error) => {
-  console.log(`-- An ERROR occured --\n`, error);
+client.on(`error`, (err) => {
+  console.log(`\n-- An ERROR occured --\n`, err);
 });
 
 client.login(process.env.TOKEN);

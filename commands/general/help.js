@@ -8,7 +8,7 @@ module.exports = {
     name: `help`,
     aliases: [`h`, `plz`, `how`, `what`],
     category: `general`,
-    description: `Returns the list of valid commands.`,
+    description: `Returns the list of valid commands, or gives more detail on a specific command.`,
     params: `[ ${cb}command / alias${cb} ]`,
     run: async (client, message, args) => {
         if (args[0]) return getOne(client, message, args[0]);
@@ -17,8 +17,7 @@ module.exports = {
 }
 
 const getAll = (client, message) => {
-    const embed = new RichEmbed()
-        .setColor(color.discord)
+    const embed = new RichEmbed().setColor(color.discord)
 
     const commands = (category) => {
         return client.commands
@@ -35,7 +34,7 @@ const getAll = (client, message) => {
 }
 
 const getOne = (client, message, input) => {
-    const embed = new RichEmbed()
+    const embed = new RichEmbed().setColor(color.success)
 
     const cmd = client.commands.get(input.toLowerCase()) || client.commands.get(client.aliases.get(input.toLowerCase()));
 
@@ -50,8 +49,8 @@ const getOne = (client, message, input) => {
     if (cmd.description) info += `\n**Description:** ${cmd.description}`;
     if (cmd.params) {
         info += `\n**Parameters:** ${cmd.params}`;
-        embed.setFooter(`<required>    [optional]    --none--`)
+        // embed.setFooter(`<required>   [optional]   --none--`)
     }
 
-    return message.channel.send(embed.setColor(color.success).setDescription(info))
+    return message.channel.send(embed.setDescription(info))
 }
