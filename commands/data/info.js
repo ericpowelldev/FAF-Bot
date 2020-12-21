@@ -7,7 +7,7 @@ const { cb, getMember, formatDate } = require(`../../utils/global.js`);
 module.exports = {
     name: `info`,
     aliases: [`i`, `user`, `userinfo`, `member`, `memberinfo`],
-    category: `general`,
+    category: `data`,
     description: `Returns info on the specified user.`,
     params: `[ ${cb}username / id / mention${cb} ]`,
     run: async (client, message, args) => {

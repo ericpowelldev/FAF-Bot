@@ -7,7 +7,7 @@ const { cb } = require(`../../utils/global.js`);
 //////////////////////////////  EXPORT COMMAND  //////////////////////////////
 module.exports = {
     // name: `me`,
-    category: `general`,
+    category: `data`,
     description: `Create/Modify your custom stored info.`,
     params: `< ${cb}custom key${cb} >    < ${cb}custom value${cb} >`,
     example: `${cb}.me birthday 10/11/1995${cb}`,

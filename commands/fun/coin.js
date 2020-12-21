@@ -5,10 +5,10 @@ const { cb, rdmInt } = require(`../../utils/global.js`);
 module.exports = {
     name: `coin`,
     aliases: [`flip`, `toss`],
-    category: `general`,
+    category: `fun`,
     description: `Returns heads or tails based on a 50-50.`,
     params: `-- ${cb}none${cb} --`,
     run: async (client, message, args) => {
-        return message.reply(`flipped a ${cb}coin${cb} and got ${cb}${rdmInt(0, 1) === 0 ? `HEADS` : `TAILS`}${cb}`);
+        return message.reply(`flipped a coin and got ${cb}${rdmInt(0, 1) === 0 ? `HEADS` : `TAILS`}${cb}`);
     }
 }

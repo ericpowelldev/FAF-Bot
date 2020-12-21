@@ -5,7 +5,7 @@ const fs = require(`fs`);
 const moment = require(`moment`);
 const mongoose = require(`mongoose`);
 const pj = require(`./package.json`);
-const { prefix, cb, msgXP } = require(`./utils/global.js`);
+const { prefix, adminPrefix, cb, msgXP } = require(`./utils/global.js`);
 const { CREATE_USER, UPDATE_USER, UPDATE_USER_XP } = require(`./utils/api.js`);
 
 //////////////////////////////  SETUP  //////////////////////////////
@@ -30,6 +30,7 @@ mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/faf_db`, { useN
 
 // Action variables
 let recentAuthors = [];
+let greetings = [`hello`, `hey`, `hi`, `sup`, `yo`]
 
 //////////////////////////////  ACTIONS  //////////////////////////////
 
@@ -52,47 +53,57 @@ client.on(`ready`, () => {
 
 // On Message
 client.on(`message`, async message => {
+  const log = true;
+  try {
+    // VALIDATION //
+    if (message.author.bot) return; // Ignore if the bot itself sent the message (Prevents infinite loop)
+    if (!message.guild) return; // Ignore if message does not have a server tied to it
+    if (!message.member) message.member = await message.guild.fetchMember(message); // Check if member exists in the server
 
-  // VALIDATION //
-  if (message.author.bot) return; // Check if a bot sent the message (Prevents infinite loop)
-  if (!message.guild) return; // Check if the message has a server tied to it
-  if (!message.member) message.member = await message.guild.fetchMember(message); // Check if member exists in the server
+    // MESSAGE VARIABLES //
+    let msgChannel = message.channel.name;
+    let msgAuthor = message.author.username;
+    let msgTime = moment(message.createdTimestamp).format(`LTS`);
+    let msg = message.content;
 
-  // MESSAGE VARIABLES //
-  let msgChannel = message.channel.name;
-  let msgAuthor = message.author.username;
-  let msgTime = moment(message.createdTimestamp).format(`LTS`);
-  let msg = message.content;
+    // MESSAGE LOG //
+    log && console.log(`[#${msgChannel}] ${msgAuthor} (${msgTime}): ${msg}`);
 
-  // PUSH TO RECENT MESSAGES ARRAY //
-  if (recentAuthors.length < 10) recentAuthors.push(msgAuthor);
-  else {
-    recentAuthors.shift();
-    recentAuthors.push(msgAuthor);
+    // PUSH TO RECENT MESSAGES ARRAY //
+    if (recentAuthors.length < 6) recentAuthors.push(msgAuthor);
+    else {
+      recentAuthors.shift();
+      recentAuthors.push(msgAuthor);
+    }
+
+    // UPDATE THE MESSAGE AUTHOR'S XP
+    let xpToAdd = msgXP - (recentAuthors.filter(item => item === msgAuthor).length * 2) // Add XP to user based on how much the user has spammed the chat (10, 8, 6, 4, 2, 0)
+    UPDATE_USER_XP(message.author, xpToAdd);
+
+    // CUSTOM GREETINGS //
+    greetings.map(greeting => {
+      if (msg.toLocaleLowerCase() === greeting) return message.channel.send(message.author + `, ${client.user.username} says ${greeting}!`);
+    });
+
+    // FIND COMMAND & ARGS //
+    if (!msg.startsWith(prefix) && !msg.startsWith(adminPrefix)) return;
+    const args = msg.slice(prefix.length).trim().split(/ +/g);
+    const cmd = args.shift().toLowerCase(); // Get first argument & make it lowercase
+    let command = client.commands.get(cmd); // Get command
+    if (!command) command = client.commands.get(client.aliases.get(cmd)); // Get alias
+
+    // RUN COMMAND //
+    if (command) command.run(client, message, args);
+
+    // DELETE MESSAGE //
+    if (message.deletable) message.delete();
+
+    // COMMAND ERROR //
+    if (!command) return message.reply(`command not recognized! Try ${cb}.help${cb} for a list of valid commands...`).then(m => m.delete(10000));
   }
-  UPDATE_USER_XP(message.author, msgXP - recentAuthors.filter(item => item === message.author.username).length + 1)
-
-  // CUSTOM MESSAGES //
-  if (msg === `Hello` || msg === `hello`) return message.channel.send(message.author + `, ${client.user.username} says hello!`);
-
-  // MESSAGE LOG //
-  console.log(`[#${msgChannel}] ${msgAuthor} (${msgTime}): ${msg}`);
-
-  // FIND COMMAND & ARGS //
-  if (!msg.startsWith(prefix)) return;
-  const args = msg.slice(prefix.length).trim().split(/ +/g);
-  const cmd = args.shift().toLowerCase(); // Get first argument & make it lowercase
-  let command = client.commands.get(cmd); // Get command
-  if (!command) command = client.commands.get(client.aliases.get(cmd)); // Get alias
-
-  // RUN COMMAND //
-  if (command) command.run(client, message, args);
-
-  // DELETE MESSAGE //
-  if (message.deletable) message.delete();
-
-  // COMMAND ERROR //
-  if (!command) return message.reply(`command not recognized! Try ${cb}.help${cb} for a list of valid commands...`);
+  catch (err) {
+    console.log(`\n>> An ERROR occured on message <<\n`, err);
+  }
 });
 
 // On User Join
@@ -113,7 +124,7 @@ client.on(`reconnecting`, () => {
 
 // On Error
 client.on(`error`, (err) => {
-  console.log(`\n-- An ERROR occured --\n`, err);
+  console.log(`\n>> An ERROR occured <<\n`, err);
 });
 
 client.login(process.env.TOKEN);

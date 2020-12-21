@@ -7,7 +7,7 @@ const { cb, log, rdmInt } = require(`../../utils/global.js`);
 module.exports = {
     name: `roll`,
     aliases: [`r`, `dice`, `d`],
-    category: `general`,
+    category: `fun`,
     description: `Rolls a die based on a number of dice, number of sides, and modifier.`,
     params: `[ ${cb}# of dice${cb} ] d [ ${cb}# of sides${cb} ] + [ ${cb}modifiers${cb} ]`,
     example: `${cb}.r 4d20+69${cb}`,
@@ -66,6 +66,7 @@ module.exports = {
             log(`RESULT NUMBER: `, resNum);
             log(`RESULT MOD: `, resMod);
             log(`TOTAL: `, total);
+            log();
 
             return message.reply(`rolled ${cb}${amount}d${sides}${resMod !== 0 ? (resMod > 0 ? "+" + resMod : resMod) : ``}${cb} and got ${cb}${total}${cb}${args[0] === `4d20+69` ? ` ( ͡° ͜ʖ ͡°)` : ``}`);
         }

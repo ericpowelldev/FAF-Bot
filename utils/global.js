@@ -8,6 +8,9 @@ module.exports = {
   // Stored prefix to initiate a command
   prefix: `.`,
 
+  // Stored prefix to initiate an admin command
+  adminPrefix: `!`,
+
   // Color palette object
   color: {
     info: `#0080ff`,
@@ -21,8 +24,8 @@ module.exports = {
   // Code-block to string-literal
   cb: "``",
 
-  // Default amount of experience for messages
-  msgXP: 10,
+  // Default amount of experience for different actions
+  msgXP: 12,
 
   //////////////////////////////  FUNCTIONS  //////////////////////////////
 
@@ -46,25 +49,29 @@ module.exports = {
   // Function to get a specified member based on a search result
   getMember: function (message, toFind = ``) {
     const log = true;
+    try {
+      toFind = toFind.toLowerCase();
+      
+      let target = message.guild.members.get(toFind);
+      
+      if (!target && message.mentions.members) target = message.mentions.members.first();
+      
+      if (!target && toFind) {
+        target = message.guild.members.find(member => {
+          return member.displayName.toLowerCase().includes(toFind) ||
+          member.user.tag.toLowerCase().includes(toFind);
+        });
+      }
+      
+      if (!target) target = message.member;
+      
+      log && console.log(`\nFind: "${toFind}" --> Found: ${target ? target.user.username : null}\n`);
 
-    toFind = toFind.toLowerCase();
-    
-    let target = message.guild.members.get(toFind);
-    
-    if (!target && message.mentions.members) target = message.mentions.members.first();
-    
-    if (!target && toFind) {
-      target = message.guild.members.find(member => {
-        return member.displayName.toLowerCase().includes(toFind) ||
-        member.user.tag.toLowerCase().includes(toFind);
-      });
+      return target;
     }
-    
-    if (!target) target = message.member;
-    
-    log && console.log(`\nFind: "${toFind}" --> Found: ${target ? target.user.username : null}\n`);
-
-    return target;
+    catch (err) {
+      console.log(`\n>> getMember() FAILED <<\n`, err);
+    }
   },
 
   // Function to format the date into a readable form

@@ -48,7 +48,7 @@ module.exports = {
         .then(res => {
           const nextXP = res.lvl * 100 * (res.lvl + 1);
           if (res.xp > nextXP) {
-            db.User.findOneAndUpdate({ uid: user.id }, { $inc: { lvl: 1, gold: (res.lvl) * 10 } }, { new: true })
+            db.User.findOneAndUpdate({ uid: user.id }, { $inc: { lvl: 1, gold: (res.lvl + 1) * 10 } }, { new: true })
               .then(res => {
                 log && console.log(`\n${res.name} has leveled up to lvl ${res.lvl}!\n`);
               })
@@ -57,7 +57,7 @@ module.exports = {
         })
         .catch(err => {
           console.log(`\n>> UPDATE_USER_XP FAILED <<, Could not update xp\n`, err);
-          this.CREATE_USER(user);
+          CREATE_USER(user);
         });
     }
     catch (err) { console.log(`\n>> UPDATE_USER_XP FAILED <<\n`, err); }
