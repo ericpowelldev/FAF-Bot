@@ -5,8 +5,8 @@ const fs = require(`fs`);
 const moment = require(`moment`);
 const mongoose = require(`mongoose`);
 const pj = require(`./package.json`);
-const { prefix, adminPrefix, cb, msgXP } = require(`./utils/global.js`);
-const { CREATE_USER, UPDATE_USER, UPDATE_USER_XP } = require(`./utils/api.js`);
+const { prefix, adminPrefix, cb, msgXP, now } = require(`./utils/global.js`);
+const { CREATE_USER, UPDATE_USER_XP } = require(`./utils/api.js`);
 
 //////////////////////////////  SETUP  //////////////////////////////
 
@@ -36,7 +36,7 @@ let greetings = [`hello`, `hey`, `hi`, `sup`, `yo`]
 
 // On Start
 client.on(`ready`, () => {
-  console.log();
+  console.log(`\n${now()} - CONNECTED to the server\n`);
   console.log(`-- (c) ${moment().format(`YYYY`)} by Eric Powell --`);
   console.log(`-- ${client.user.username} v${pj.version} is online --`);
   console.log();
@@ -63,11 +63,11 @@ client.on(`message`, async message => {
     // MESSAGE VARIABLES //
     let msgChannel = message.channel.name;
     let msgAuthor = message.author.username;
-    let msgTime = moment(message.createdTimestamp).format(`LTS`);
+    let msgTime = moment(message.createdTimestamp).format(`MM/DD/YYYY LTS`);
     let msg = message.content;
 
     // MESSAGE LOG //
-    log && console.log(`[#${msgChannel}] ${msgAuthor} (${msgTime}): ${msg}`);
+    log && console.log(`${msgTime} - ${msgAuthor} [#${msgChannel}]: ${msg}`);
 
     // PUSH TO RECENT MESSAGES ARRAY //
     if (recentAuthors.length < 6) recentAuthors.push(msgAuthor);
@@ -77,8 +77,9 @@ client.on(`message`, async message => {
     }
 
     // UPDATE THE MESSAGE AUTHOR'S XP
-    let xpToAdd = msgXP - (recentAuthors.filter(item => item === msgAuthor).length * 2) // Add XP to user based on how much the user has spammed the chat (10, 8, 6, 4, 2, 0)
-    UPDATE_USER_XP(message.author, xpToAdd);
+    // let xpToAdd = msgXP - (recentAuthors.filter(item => item === msgAuthor).length * 2) // Add XP to user based on how much the user has spammed the chat (10, 8, 6, 4, 2, 0)
+    let xpToAdd = msgXP;
+    await UPDATE_USER_XP(message.author, xpToAdd);
 
     // CUSTOM GREETINGS //
     greetings.map(greeting => {
@@ -102,7 +103,7 @@ client.on(`message`, async message => {
     if (!command) return message.reply(`command not recognized! Try ${cb}.help${cb} for a list of valid commands...`).then(m => m.delete(10000));
   }
   catch (err) {
-    console.log(`\n>> An ERROR occured on message <<\n`, err);
+    console.log(`\n${now()} - An ERROR occured on message\n`, err);
   }
 });
 
@@ -119,12 +120,22 @@ client.on(`guildMemberAdd`, async (member) => {
 
 // On Reconnection Attempt
 client.on(`reconnecting`, () => {
-  console.log(`\n-- Attempting to reconnect to the WebSocket --\n`);
+  console.log(`\n${now()} - RECONNECTING to the server\n`);
+});
+
+// On Disconnection
+client.on(`disconnect`, () => {
+  console.log(`\n${now()} - DISCONNECTED from the server\n`);
 });
 
 // On Error
 client.on(`error`, (err) => {
-  console.log(`\n>> An ERROR occured <<\n`, err);
+  console.log(`\n${now()} - An ERROR occured:\n`, err);
+});
+
+// On Unhandled Rejection
+process.on(`unhandledRejection`, (err) => {
+  console.log(`\n${now()} - An UNHANDLED REJECTION occured:\n`, err);
 });
 
 client.login(process.env.TOKEN);

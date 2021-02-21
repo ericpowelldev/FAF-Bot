@@ -14,7 +14,7 @@ const User = mongoose.Schema({
     },
     lvl: {
         type: Number,
-        default: 1,
+        default: 0,
         required: true,
     },
     xp: {
