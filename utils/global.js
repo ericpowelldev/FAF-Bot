@@ -1,8 +1,8 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
+const moment = require(`moment`);
 
-//////////////////////////////  EXPORT GLOBAL CONTEXT  //////////////////////////////
+//////////////////////////////  EXPORT GLOBAL TOOLS  //////////////////////////////
 module.exports = {
-
   //////////////////////////////  CONSTANTS  //////////////////////////////
 
   // Stored prefix to initiate a command
@@ -17,6 +17,7 @@ module.exports = {
     success: `#00ff60`,
     warning: `#ffa000`,
     error: `#ff2040`,
+
     discord: `#7289da`,
     twitch: `#9146ff`,
   },
@@ -36,6 +37,11 @@ module.exports = {
     else console.log(msg, obj);
   },
 
+  // Function to return the current timestamp
+  now: () => {
+    return moment().format(`MM/DD/YYYY LTS`);
+  },
+
   // Function to get a random integer between 2 numbers
   rdmInt: (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -51,31 +57,38 @@ module.exports = {
     const log = true;
     try {
       toFind = toFind.toLowerCase();
-      
+
       let target = message.guild.members.get(toFind);
-      
+
       if (!target && message.mentions.members) target = message.mentions.members.first();
-      
+
       if (!target && toFind) {
-        target = message.guild.members.find(member => {
-          return member.displayName.toLowerCase().includes(toFind) ||
-          member.user.tag.toLowerCase().includes(toFind);
+        target = message.guild.members.find((member) => {
+          return member.displayName.toLowerCase().includes(toFind) || member.user.tag.toLowerCase().includes(toFind);
         });
       }
-      
+
       if (!target) target = message.member;
-      
+
       log && console.log(`\nFind: "${toFind}" --> Found: ${target ? target.user.username : null}\n`);
 
       return target;
-    }
-    catch (err) {
+    } catch (err) {
       console.log(`\n>> getMember() FAILED <<\n`, err);
     }
+  },
+
+  // Function to get the next lvl's xp amount
+  getNextXP: function (nextLvl) {
+    let nextXP = 0;
+    for (let i = 0; i <= nextLvl; i++) {
+      nextXP += i * 50;
+    }
+    return nextXP;
   },
 
   // Function to format the date into a readable form
   formatDate: function (date) {
     return new Intl.DateTimeFormat(`en-US`).format(date);
   },
-}
+};
