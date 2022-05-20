@@ -1,5 +1,5 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
-const moment = require(`moment`);
+const dayjs = require(`dayjs`);
 
 //////////////////////////////  EXPORT GLOBAL TOOLS  //////////////////////////////
 module.exports = {
@@ -39,7 +39,7 @@ module.exports = {
 
   // Function to return the current timestamp
   now: () => {
-    return moment().format(`MM/DD/YYYY LTS`);
+    return dayjs().format(`MM/DD/YYYY LTS`);
   },
 
   // Function to get a random integer between 2 numbers

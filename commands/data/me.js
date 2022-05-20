@@ -1,6 +1,5 @@
 //////////////////////////////  DEPENDENCIES  //////////////////////////////
 const { RichEmbed } = require(`discord.js`);
-const moment = require(`moment`);
 const { stripIndents } = require(`common-tags`);
 const { cb } = require(`../../utils/global.js`);
 
