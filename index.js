@@ -2,11 +2,17 @@
 const { Client, Collection } = require(`discord.js`);
 const { config } = require(`dotenv`);
 const fs = require(`fs`);
-const moment = require(`moment`);
 const mongoose = require(`mongoose`);
 const pj = require(`./package.json`);
+
 const { prefix, adminPrefix, cb, msgXP, now } = require(`./utils/global.js`);
 const { CREATE_USER, UPDATE_USER_XP } = require(`./utils/api.js`);
+
+const dayjs = require(`dayjs`);
+const localizedFormat = require(`dayjs/plugin/localizedFormat`);
+const utc = require(`dayjs/plugin/utc`);
+dayjs.extend(localizedFormat);
+dayjs.extend(utc);
 
 //////////////////////////////  SETUP  //////////////////////////////
 
@@ -20,39 +26,47 @@ client.categories = fs.readdirSync(`./commands/`);
 config({ path: __dirname + `/.env` });
 
 // Fire command handler
-[`command`].forEach(handler => { require(`./handlers/${handler}`)(client) });
+[`command`].forEach((handler) => {
+  require(`./handlers/${handler}`)(client);
+});
 
 // Mongoose
 const db = require(`./models`);
-mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/faf_db`, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/faf_db`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+});
 
 //////////////////////////////  VARIABLES  //////////////////////////////
 
 // Action variables
 let recentAuthors = [];
-let greetings = [`hello`, `hey`, `hi`, `sup`, `yo`]
+let greetings = [`hello`, `hey`, `hi`, `sup`, `yo`];
 
 //////////////////////////////  ACTIONS  //////////////////////////////
 
 // On Start
 client.on(`ready`, () => {
   console.log(`\n${now()} - CONNECTED to the server\n`);
-  console.log(`-- (c) ${moment().format(`YYYY`)} by Eric Powell --`);
+  console.log(`-- (c) ${dayjs().format(`YYYY`)} by Eric Powell --`);
   console.log(`-- ${client.user.username} v${pj.version} is online --`);
   console.log();
-  // log(moment.utc(`10-11-95`, [`MM/DD/YY`, `MM/DD/YYYY`, `MM-DD-YY`, `MM-DD-YYYY`, `DD/MM/YY`, `DD/MM/YYYY`, `DD-MM-YY`, `DD-MM-YYYY`]).format(`MM/DD/YYYY`));
+  // log(dayjs.utc(`10-11-95`, [`MM/DD/YY`, `MM/DD/YYYY`, `MM-DD-YY`, `MM-DD-YYYY`, `DD/MM/YY`, `DD/MM/YYYY`, `DD-MM-YY`, `DD-MM-YYYY`]).format(`MM/DD/YYYY`));
 
-  client.user.setPresence({
-    game: {
-      name: `.help`,
-      type: `LISTENING`
-    },
-    status: `online`
-  }).catch(console.error);
+  client.user
+    .setPresence({
+      game: {
+        name: `.help`,
+        type: `LISTENING`,
+      },
+      status: `online`,
+    })
+    .catch(console.error);
 });
 
 // On Message
-client.on(`message`, async message => {
+client.on(`message`, async (message) => {
   const log = true;
   try {
     // VALIDATION //
@@ -63,7 +77,7 @@ client.on(`message`, async message => {
     // MESSAGE VARIABLES //
     let msgChannel = message.channel.name;
     let msgAuthor = message.author.username;
-    let msgTime = moment(message.createdTimestamp).format(`MM/DD/YYYY LTS`);
+    let msgTime = dayjs(message.createdTimestamp).format(`MM/DD/YYYY LTS`);
     let msg = message.content;
 
     // MESSAGE LOG //
@@ -82,8 +96,9 @@ client.on(`message`, async message => {
     await UPDATE_USER_XP(message.author, xpToAdd);
 
     // CUSTOM GREETINGS //
-    greetings.map(greeting => {
-      if (msg.toLocaleLowerCase() === greeting) return message.channel.send(message.author + `, ${client.user.username} says ${greeting}!`);
+    greetings.map((greeting) => {
+      if (msg.toLocaleLowerCase() === greeting)
+        return message.channel.send(message.author + `, ${client.user.username} says ${greeting}!`);
     });
 
     // FIND COMMAND & ARGS //
@@ -100,9 +115,11 @@ client.on(`message`, async message => {
     if (message.deletable) message.delete();
 
     // COMMAND ERROR //
-    if (!command) return message.reply(`command not recognized! Try ${cb}.help${cb} for a list of valid commands...`).then(m => m.delete(10000));
-  }
-  catch (err) {
+    if (!command)
+      return message
+        .reply(`command not recognized! Try ${cb}.help${cb} for a list of valid commands...`)
+        .then((m) => m.delete(10000));
+  } catch (err) {
     console.log(`\n${now()} - An ERROR occured on message\n`, err);
   }
 });
